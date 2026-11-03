@@ -1,0 +1,8 @@
+@extends('layouts.app')
+@section('title',$student->exists ? 'Edit student' : 'Add student')
+@section('content')
+<section class="card"><h1>{{ $student->exists ? 'Edit student' : 'Add student' }}</h1><p class="muted">All fields are required.</p>@if($errors->any())<div class="alert errors" role="alert">Please correct the highlighted fields.</div>@endif
+<form method="post" action="{{ $student->exists ? route('students.update',$student) : route('students.store') }}">@csrf @if($student->exists) @method('PUT') @endif
+<div class="grid">@foreach(['student_number'=>'Student number','first_name'=>'First name','last_name'=>'Last name','email'=>'Email','course'=>'Course'] as $field=>$label)<div class="field"><label for="{{ $field }}">{{ $label }}</label><input id="{{ $field }}" name="{{ $field }}" type="{{ $field==='email' ? 'email' : 'text' }}" value="{{ old($field,$student->$field) }}" required maxlength="{{ ['student_number'=>30,'first_name'=>100,'last_name'=>100,'course'=>120,'email'=>255][$field] }}">@error($field)<div class="error">{{ $message }}</div>@enderror</div>@endforeach
+<div class="field"><label for="year_level">Year level</label><select id="year_level" name="year_level" required><option value="">Select year</option>@for($year=1;$year<=6;$year++)<option value="{{ $year }}" @selected(old('year_level',$student->year_level)==$year)>Year {{ $year }}</option>@endfor</select>@error('year_level')<div class="error">{{ $message }}</div>@enderror</div></div><div class="actions"><button>Save student</button><a class="button secondary" href="{{ route('students.index') }}">Cancel</a></div></form></section>
+@endsection
