@@ -1,1 +1,10 @@
-
+{
+  "name": "Student Management · PHP 8.3",
+  "build": { "dockerfile": "Dockerfile" },
+  "remoteUser": "vscode",
+  "forwardPorts": [8000],
+  "portsAttributes": { "8000": { "label": "Student Management", "onAutoForward": "notify", "protocol": "http" } },
+  "postCreateCommand": "bash scripts/setup.sh",
+  "postStartCommand": "bash scripts/start.sh",
+  "customizations": { "vscode": { "settings": { "php.validate.executablePath": "/usr/local/bin/php" } } }
+}
