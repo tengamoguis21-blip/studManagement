@@ -42,8 +42,7 @@ BEGIN
  OR NEW.email IS NULL OR char_length(NEW.email) > 255
  OR NEW.email !~ '^[^[:space:]@]+@[^[:space:]@]+\.[^[:space:]@]+$'
  OR NEW.year_level IS NULL OR NEW.year_level NOT BETWEEN 1 AND 6 THEN
- RAISE EXCEPTION 'Student fields are invalid. Check required fields, email and year level.' USING ERRCOD
- E = '23514';
+ RAISE EXCEPTION 'Student fields are invalid. Check required fields, email and year level.' USING ERRCODE = '23514';
  END IF;
  IF TG_OP = 'INSERT' THEN
  NEW.created_at := COALESCE(NEW.created_at, timezone('utc', now()));
@@ -88,8 +87,7 @@ DROP TRIGGER IF EXISTS student_app_validate_before_write ON public.students;
 DROP FUNCTION IF EXISTS public.student_app_search(text, integer, integer);
 DROP FUNCTION IF EXISTS public.student_app_validate_row();
 REVOKE ALL ON public.students FROM anon;
-REVOKE INSERT (student_number, first_name, last_name, email, course, year_level), UPDATE (student_number, first
- _name, last_name, email, course, year_level) ON public.students FROM anon;
+REVOKE INSERT (student_number, first_name, last_name, email, course, year_level), UPDATE (student_number, first_name, last_name, email, course, year_level) ON public.students FROM anon;
 REVOKE USAGE, SELECT ON SEQUENCE public.students_id_seq FROM anon, authenticated;
 NOTIFY pgrst, 'reload schema';
 SQL);
